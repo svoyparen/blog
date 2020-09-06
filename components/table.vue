@@ -18,6 +18,7 @@
 				<td>{{ item.text }}</td>
 				<td>{{ item.createdAt | toLocaleDateString }}</td>
 				<td>{{ item.updatedAt | toLocaleDateString }}</td>
+				
 			</tr>
 		</table>
 	</div>
@@ -40,7 +41,7 @@
 		methods: {
 			showPopupToEditPost(item) {
 				this.$emit('showPopup', item)
-			}
+			},
 		}
 
 	}
@@ -49,9 +50,8 @@
 <style>
 	#table {
 		width: 100%;
-		margin: 5px 15px; 
-		padding: 5px 15px;
 		background-color: #fff;
+		padding: 15px;
 	}
 	th {
 		background-color: #fc0;

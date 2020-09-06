@@ -5,24 +5,24 @@
 				<label for="title">Название статьи</label><br />
 				<input type="text" name="title" v-model.trim="title"><br />
 				<label for="text">Текст статьи</label><br />
-				<textarea name="text">{{ text }}</textarea><br />
+				<textarea name="text" v-model.trim="text">{{ text }}</textarea><br />
 				<span class="save" @click="save">Сохранить</span>
-				<span class="reset" @click="reset">Сбросить</span>
+				<span class="remove" @click="remove">Удалить</span>
 			</form>
 		</div>
 	</div>
 </template>
 
 <script>
+	import axios from 'axios'
 	export default {
-		props: {
-			id: { type: Number },
-			title: { type: String, default: '' },
-			text: { type: String, default: '' },
-		},
-
 		data: () => ({
-			isVisible: false
+			isVisible: false,
+			isPostSend: false,
+			isPostDelete: false,
+			id: '',
+			title: '',
+			text: '',
 		}),
 
 		methods: {
@@ -32,17 +32,45 @@
 			},
 
 			setData(item) {
+				this.id = item.id
 				this.title = item.title
 				this.text = item.text
 			},
 
-			save() {
+			async save(event) {
 				console.log('save')
+				let { id, title, text } = this
+				if( !id ) {
+					let response = await axios.post('https://test.cornapi.ru/blog', {title, text})
+						.catch( error => {
+							console.log( 'Ошибка! ' + error )
+							this.isPostSend = true
+							return false
+						})
+				} else {
+					//const editDate = new Date()
+					let response = await axios.put('https://test.cornapi.ru/blog/' + id, {title, text})
+						.catch( error => {
+							console.log( 'Ошибка! ' + error )
+							this.isPostSend = true
+							return false
+						})
+				}
 			},
 
-			reset() {
-				console.log('reset')
-			}
+			async remove(event) {
+				console.log('начинаем удаление ' + this.id + '-й статьи')
+				let response = await axios.delete('https://test.cornapi.ru/blog/' + this.id)
+					.then(response => {
+						this.setVisible(false)
+						console.log('удалено!')
+					})
+					.catch( error => {
+						console.log( 'Ошибка! ' + error )
+						this.isPostDelete = true
+						return false
+					})
+			},
 
 		}
 	}
@@ -74,6 +102,9 @@
 		padding: 15px;
 		margin: 15px;
 	}
+	label {
+		color: #111111;
+	}
 	input {
 		width: 100%;
 		margin: 15px;
@@ -91,11 +122,20 @@
 		color: white;
 		padding: 5px 15px;
 	}
-	.reset {
+	.save:hover {
+		background-color: #00aa00;
+	}
+	.remove {
 		margin: 15px;
 		background-color: #cc3333;
 		color: white;
 		padding: 5px 15px;
-
 	}
+	.remove:hover {
+		background-color: #aa1111;
+	}
+	.remove:click {
+		background-color: #550000;
+	}
+
 </style>
