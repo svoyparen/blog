@@ -12,29 +12,50 @@
 				<td>Всего статей</td>
 				<td>{{ items.length }}</td>
 			</tfoot>
-			<tr v-for="item in items" @click="showPopupToEditPost(item)">
-				<td>{{ item.id }}</td>
-				<td>{{ item.title }}</td>
-				<td>{{ item.text }}</td>
-				<td>{{ item.createdAt | toLocaleDateString }}</td>
-				<td>{{ item.updatedAt | toLocaleDateString }}</td>
-				
-			</tr>
+			<TableRow
+				v-for="item in paginated"
+				:id="item.id"
+				:item="item"
+				@showPopup="showPopupToEditPost"
+			/>
 		</table>
+		<span
+			class="pages"
+			v-for="page in pages"
+			:key="page"
+			:class="{ 'pageSelected': page === pageNumber }"
+			@click="goTo(page)">
+				{{ page }}
+				<!--<nuxt-link :to="{{ page }}" />-->
+		</span>
 	</div>
 </template>
 
 <script>
+	import TableRow from '~/components/TableRow'
 	export default {
 		props: {
-			items: Array, required: true
+			items: { Array, required: true }
 		},
 
-		filters: {
-			toLocaleDateString(date) {
-				if( date ) {
-					return new Date(date).toDateString()
-				}
+		components: {
+			TableRow,
+		},
+
+		data: () => ({
+			postsPerPage: 3,
+			pageNumber: 1,
+		}),
+
+		computed: {
+			pages() {
+				return Math.ceil( this.items.length / this.postsPerPage )
+			},
+
+			paginated() {
+				let from = (this.pageNumber - 1) * this.postsPerPage
+				let to = from + this.postsPerPage
+				return this.items.slice(from, to)
 			},
 		},
 
@@ -42,6 +63,10 @@
 			showPopupToEditPost(item) {
 				this.$emit('showPopup', item)
 			},
+
+			goTo(page) {
+				this.pageNumber = page
+			}
 		}
 
 	}
@@ -78,5 +103,18 @@
 	.thead {
 
 	}
+	.pages {
+		border: 1px solid grey;
+		font-size: 1.1em;
+		margin: 5px;
+		padding: 5px;
+		text-align: center;
+	}
+	.pages:hover, .pageSelected {
+		background-color: #fc0;
+		cursor: pointer;
+		color:white;
+	}
+
 
 </style>

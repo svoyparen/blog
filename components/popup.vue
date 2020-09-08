@@ -2,6 +2,7 @@
 	<div class="modal-mask" v-if="this.isVisible">
 		<div class="modal-container">
 			<form class="form">
+				<span class="close" @click="close">x</span><br />
 				<label for="title">Название статьи</label><br />
 				<input type="text" name="title" v-model.trim="title"><br />
 				<label for="text">Текст статьи</label><br />
@@ -38,20 +39,16 @@
 			},
 
 			async save(event) {
-				console.log('save')
 				let { id, title, text } = this
 				if( !id ) {
 					let response = await axios.post('https://test.cornapi.ru/blog', {title, text})
 						.catch( error => {
-							console.log( 'Ошибка! ' + error )
 							this.isPostSend = true
 							return false
 						})
 				} else {
-					//const editDate = new Date()
 					let response = await axios.put('https://test.cornapi.ru/blog/' + id, {title, text})
 						.catch( error => {
-							console.log( 'Ошибка! ' + error )
 							this.isPostSend = true
 							return false
 						})
@@ -70,6 +67,10 @@
 						this.isPostDelete = true
 						return false
 					})
+			},
+
+			close() {
+				this.setVisible(false)
 			},
 
 		}
@@ -101,6 +102,7 @@
 		width: 90%;
 		padding: 15px;
 		margin: 15px;
+		position: relative;
 	}
 	label {
 		color: #111111;
@@ -112,6 +114,7 @@
 	}
 	textarea {
 		width: 100%;
+		height: 250px;
 		margin: 15px;
 		padding: 15px;
 
@@ -137,5 +140,22 @@
 	.remove:click {
 		background-color: #550000;
 	}
+	.close {
+		width: 25px;
+		height: 25px;
+		text-align: center;
+		border-radius: 5px;
+		font-size: 1.3em;
+		background-color: #000;
+		color: white;
+		position: absolute;
+		top: 15px;
+		right: 15px;
+		cursor: pointer;
+		font-weight: bold;
+		opacity: 1;
+    	transition: 0.5s all ease 1s;
+	}
+
 
 </style>

@@ -34,7 +34,6 @@
         axios.get('https://test.cornapi.ru/blog')
         .then( response => {
           for ( const item in response.data.data.items ){
-            //console.log( response.data.data.items[item] )
             this.items.push(response.data.data.items[item])
           }
         })
