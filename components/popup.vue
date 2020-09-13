@@ -1,15 +1,19 @@
 <template>
 	<div class="modal-mask" v-if="this.isVisible">
 		<div class="modal-container">
-			<form class="form">
-				<span class="close" @click="close">x</span><br />
-				<label for="title">Название статьи</label><br />
-				<input type="text" name="title" v-model.trim="title"><br />
-				<label for="text">Текст статьи</label><br />
-				<textarea name="text" v-model.trim="text">{{ text }}</textarea><br />
-				<span class="save" @click="save">Сохранить</span>
-				<span class="remove" @click="remove">Удалить</span>
-			</form>
+			<fieldset :disabled=isPostSend>
+				<form class="form">
+					<div class="close" @click="close">x</div>
+					<div class="forms_block">
+						<label for="title" class="label_title">Название статьи</label><br />
+						<input type="text" name="title" v-model.trim="title"><br />
+						<label for="text">Текст статьи</label><br />
+						<textarea name="text" v-model.trim="text">{{ text }}</textarea><br />
+						<div class="save" @click="save">Сохранить</div>
+						<div class="remove" @click="remove">Удалить</div>
+					</div>
+				</form>
+			</fieldset>
 		</div>
 	</div>
 </template>
@@ -28,7 +32,6 @@
 
 		methods: {
 			setVisible(flag) {
-				console.log('Flag is ' + flag)
 				this.isVisible = flag
 			},
 
@@ -39,34 +42,37 @@
 			},
 
 			async save(event) {
+				this.isPostSend = true
 				let { id, title, text } = this
 				if( !id ) {
 					let response = await axios.post('https://test.cornapi.ru/blog', {title, text})
 						.catch( error => {
-							this.isPostSend = true
 							return false
 						})
+
 				} else {
 					let response = await axios.put('https://test.cornapi.ru/blog/' + id, {title, text})
 						.catch( error => {
-							this.isPostSend = true
 							return false
 						})
 				}
+				this.isPostSend = false
+				this.$emit('showPushMessage', 'Запись успешно сохранена')
+				this.setVisible(false)
 			},
 
 			async remove(event) {
-				console.log('начинаем удаление ' + this.id + '-й статьи')
+				this.isPostDelete = false
 				let response = await axios.delete('https://test.cornapi.ru/blog/' + this.id)
 					.then(response => {
 						this.setVisible(false)
-						console.log('удалено!')
 					})
 					.catch( error => {
-						console.log( 'Ошибка! ' + error )
-						this.isPostDelete = true
 						return false
 					})
+				this.isPostDelete = true
+				this.$emit('showPushMessage', 'Запись успешно удалена')
+				this.setVisible(false)
 			},
 
 			close() {
@@ -97,12 +103,16 @@
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
 		transition: all 0.3s ease;
 		font-family: Helvetica, Arial, sans-serif;
+		overflow-y:auto;
 	}
 	.form {
 		width: 90%;
 		padding: 15px;
 		margin: 15px;
 		position: relative;
+	}
+	.forms_block {
+		margin-top: 35px; 
 	}
 	label {
 		color: #111111;
@@ -124,6 +134,7 @@
 		background-color: #00cc00;
 		color: white;
 		padding: 5px 15px;
+		width: 50%;
 	}
 	.save:hover {
 		background-color: #00aa00;
@@ -133,12 +144,10 @@
 		background-color: #cc3333;
 		color: white;
 		padding: 5px 15px;
+		width: 50%;
 	}
 	.remove:hover {
 		background-color: #aa1111;
-	}
-	.remove:click {
-		background-color: #550000;
 	}
 	.close {
 		width: 25px;
@@ -150,11 +159,9 @@
 		color: white;
 		position: absolute;
 		top: 15px;
-		right: 15px;
+		right: 0;
 		cursor: pointer;
 		font-weight: bold;
-		opacity: 1;
-    	transition: 0.5s all ease 1s;
 	}
 
 

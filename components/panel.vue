@@ -24,7 +24,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.top_panel {
 		background-color: #111111;
 		color: #f0f0f0;

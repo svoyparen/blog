@@ -1,6 +1,6 @@
 <template>
 	<div id="table">
-		<table class="table">
+		<table class="table" id="table" @scroll="more">
 			<thead class="thead">
 				<th>Номер статьи</th>
 				<th>Заголовок статьи</th>
@@ -14,7 +14,7 @@
 			</tfoot>
 			<TableRow
 				v-for="item in paginated"
-				:id="item.id"
+				:key="item.id"
 				:item="item"
 				@showPopup="showPopupToEditPost"
 			/>
@@ -43,7 +43,7 @@
 		},
 
 		data: () => ({
-			postsPerPage: 3,
+			postsPerPage: 10,
 			pageNumber: 1,
 		}),
 
@@ -66,7 +66,19 @@
 
 			goTo(page) {
 				this.pageNumber = page
-			}
+			},
+
+			more(){
+				console.log('Scroll')
+				let table = document.querySelector('#table')
+				if(table.scrollTop + table.clientHeight >= table.scrollHeight) {
+						this.loadMore()
+					}
+			},
+
+			loadMore() {
+				console.log('Load More...')
+			},
 		}
 
 	}

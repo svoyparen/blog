@@ -1,5 +1,9 @@
 <template>
   <div class="container">
+    <PushMessage
+      @showPushMessage="showPush"
+      ref="pushMessage"
+    />
     <Table
       :items="items"
       @showPopup="openPopup"
@@ -13,16 +17,21 @@
 <script>
   import Table from '~/components/table'
   import Popup from '~/components/popup'
+  import PushMessage from '~/components/PushMessage'
   import axios from 'axios'
 
   export default {
     components: {
       Table,
       Popup,
+      PushMessage,
     },
 
     data: () => ({
       items: [],
+      fromRow: null,
+      messageFlag: true,
+      messageText: 'Статья добавлена',
     }),
 
     mounted() {
@@ -31,17 +40,25 @@
 
     methods: {
       getData() {
-        axios.get('https://test.cornapi.ru/blog')
+        let from = this.fromRow
+        axios.get('https://test.cornapi.ru/blog', {params: { from }} )
         .then( response => {
           for ( const item in response.data.data.items ){
             this.items.push(response.data.data.items[item])
           }
         })
+        //this.fromRow = this.fromRow + 10
       },
 
       openPopup(item) {
         this.$refs.popup.setVisible(true)
         this.$refs.popup.setData(item)
+      },
+
+      showPush(message) {
+        console.log('Show Push Message')
+        this.$refs.pushMessage.setVisible(true)
+        this.$refs.pushMessage.setData(message)
       }
 
     },

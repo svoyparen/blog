@@ -11,7 +11,7 @@
 <script>
 	export default {
 		props: {
-			item: { type: Array, default: () => { return [] } }
+			item: { type: Object, default: () => { return [] } }
 		},
 
 		filters: {
