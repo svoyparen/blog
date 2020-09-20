@@ -14,13 +14,22 @@
 			</tfoot>
 			<tbody>
 				<TableRow
-					v-for="item in items"
+					v-for="item in paginated"
 					:key="item.id"
 					:item="item"
 					@showPopup="showPopupToEditPost"
 				/>
 			</tbody>
 		</table>
+		<span
+			class="pages"
+			v-for="page in pages"
+			:key="page"
+			:class="{ 'pageSelected': page === pageNumber }"
+			@click="goTo(page)">
+				{{ page }}
+				<!--<nuxt-link :to="{{ page }}" />-->
+		</span>
 	</div>
 </template>
 
@@ -36,8 +45,20 @@
 		},
 
 		data: () => ({
+			postsPerPage: 10,
 			pageNumber: 1,
 		}),
+
+		computed: {
+			pages() {
+				return Math.ceil( this.items.length / this.postsPerPage )
+			},
+			paginated() {
+				let from = (this.pageNumber - 1) * this.postsPerPage
+				let to = from + this.postsPerPage
+				return this.items.slice(from, to)
+			},
+		},
 
 		methods: {
 

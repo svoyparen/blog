@@ -17,8 +17,7 @@
 		filters: {
 			toLocaleDateString(date) {
 				if( date ) {
-					//return new Date(date).getDate()
-					return new Date(date).toDateString()
+					return new Date(date * 1000).toDateString()
 				}
 			},
 		},
@@ -31,11 +30,3 @@
 
 	}
 </script>
-
-<style scoped>
-	.tableRow {
-		background-color: #ffc;
-		border: none;
-	}
-
-</style>

@@ -57,7 +57,7 @@
 						})
 				}
 				this.isPostSend = false
-				this.$emit('showPushMessage', 'Запись успешно сохранена')
+				//this.$emit('showPushMessage', 'Запись успешно сохранена')
 				this.setVisible(false)
 			},
 
@@ -71,7 +71,7 @@
 						return false
 					})
 				this.isPostDelete = true
-				this.$emit('showPushMessage', 'Запись успешно удалена')
+				//this.$emit('showPushMessage', 'Запись успешно удалена')
 				this.setVisible(false)
 			},
 

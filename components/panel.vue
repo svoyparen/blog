@@ -1,5 +1,5 @@
 <template>
-	<div class="top_panel">
+	<div id="top_panel" class="top_panel">
 		<span class="add_post" @click="addPost">Добавить статью</span>
 		<Popup
 			ref="popup"
@@ -24,11 +24,10 @@
 	}
 </script>
 
-<style scoped>
+<style>
 	.top_panel {
 		background-color: #111111;
 		color: #f0f0f0;
-		position: sticky;
 		padding: 15px;
 	}
 	.add_post {
