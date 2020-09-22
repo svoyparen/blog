@@ -47,7 +47,7 @@
     },
 
     methods: {
-      handleScroll(e) {
+      async handleScroll(e) {
         const
           { scrollTop, scrollHeight, clientHeight } = e.target,
           scrollTopMax = scrollHeight - clientHeight
@@ -55,7 +55,7 @@
         if(scrollTopMax - scrollTop < 50) {
           if(this.loading === false && this.nextRow != -1) {
             this.loading = true
-            this.getData()
+            await this.getData()
             this.loading = false
           }else{
             return false
