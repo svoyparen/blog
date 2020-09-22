@@ -53,23 +53,21 @@
           scrollTopMax = scrollHeight - clientHeight
 
         if(scrollTopMax - scrollTop < 50) {
-          if(this.loading === false && this.nextRow != -1) {
-            this.loading = true
             await this.getData()
-            this.loading = false
-          }else{
-            return false
-          }
         }
       },
 
       async getData() {
-        let response = await axios.get('https://test.cornapi.ru/blog', {params: { 'fromRow': this.nextRow }} )
-        .catch( error => {
-          console.log('Smthng wrong! ' + e)
-        })
-        response.data.data.items.forEach((item) => this.items.push(item))
-        this.nextRow = response.data.data.nextRow
+        if(this.loading === false && this.nextRow != -1) {
+          this.loading = true
+          let response = await axios.get('https://test.cornapi.ru/blog', {params: { 'fromRow': this.nextRow }} )
+          .catch( error => {
+            console.log('Smthng wrong! ' + e)
+          })
+          response.data.data.items.forEach((item) => this.items.push(item))
+          this.nextRow = response.data.data.nextRow
+          this.loading = false
+        }
       },
 
       openPopup(item) {
