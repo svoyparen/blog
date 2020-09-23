@@ -14,22 +14,23 @@
 			</tfoot>
 			<tbody>
 				<TableRow
-					v-for="item in paginated"
+					v-for="item in items"
 					:key="item.id"
 					:item="item"
 					@showPopup="showPopupToEditPost"
 				/>
 			</tbody>
 		</table>
+		
 		<span
 			class="pages"
-			v-for="page in pages"
+			v-for="page in quantityPages"
 			:key="page"
 			:class="{ 'pageSelected': page === pageNumber }"
 			@click="goTo(page)">
 				{{ page }}
-				<!--<nuxt-link :to="{{ page }}" />-->
 		</span>
+		
 	</div>
 </template>
 
@@ -37,7 +38,8 @@
 	import TableRow from '~/components/TableRow'
 	export default {
 		props: {
-			items: { Array, required: true }
+			items: { Array, required: true },
+			quantityPages: { Number, required: true },
 		},
 
 		components: {
@@ -45,22 +47,8 @@
 		},
 
 		data: () => ({
-			postsPerPage: 10,
 			pageNumber: 1,
 		}),
-
-		computed: {
-			pages() {
-				console.log('Pages')
-				return Math.ceil( this.items.length / this.postsPerPage )
-			},
-			paginated() {
-				console.log('Paginated')
-				let from = (this.pageNumber - 1) * this.postsPerPage
-				let to = from + this.postsPerPage
-				return this.items.slice(from, to)
-			},
-		},
 
 		methods: {
 
@@ -70,19 +58,9 @@
 
 			goTo(page) {
 				this.pageNumber = page
+				this.$emit('getData', page)
 			},
 
-			more(){
-				console.log('Scroll')
-				let table = document.querySelector('#table')
-				if(table.scrollTop + table.clientHeight >= table.scrollHeight) {
-						this.loadMore()
-					}
-			},
-
-			loadMore() {
-				console.log('Load More...')
-			},
 		}
 	}
 </script>
@@ -91,6 +69,7 @@
 	#table {
 		width: 100%;
 		background-color: #fff;
+		display: block;
 
 	}
 	thead {
