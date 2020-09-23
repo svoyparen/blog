@@ -1,13 +1,15 @@
 <template>
   <div class="container" ref="overflow">
+
     <Table2
       :items="items"
-      
       @showPopup="openPopup"
-      />
-      <Popup
-        ref="popup"
-      />
+      @getData="getData"
+      :quantityPages="quantityPages"
+    />
+    <Popup
+      ref="popup"
+    />
 <!--    <PushMessage
       @showPushMessage="showPush"
       ref="pushMessage"
@@ -19,6 +21,7 @@
 <script>
   import Table2 from '@/components/table2'
   import Popup from '@/components/popup'
+  //import Pagination from '@/components/pagination'
   //import PushMessage from '~/components/PushMessage'
   import axios from 'axios'
 
@@ -26,6 +29,7 @@
     components: {
       Table2,
       Popup,
+      //Pagination,
       //PushMessage,
     },
 
@@ -33,6 +37,7 @@
       items: [],
       loading: false,
       nextRow: null,
+      quantityPages: 1,
       messageFlag: true,
       messageText: 'Статья добавлена',
     }),
@@ -43,15 +48,18 @@
 
     methods: {
 
-    	async getData() {
-	      	while(this.nextRow !== -1){
-				let response = await axios.get('https://test.cornapi.ru/blog', {params: { 'fromRow': this.nextRow }} )
+    	async getData(page = 1) {
+				let response = await axios.get('https://test.cornapi.ru/blog/paginate', {params: { 'page': page }} )
 	        	.catch( error => {
 	        		console.log('Smthng wrong! ' + e)
 	        	})
-	        	response.data.data.items.forEach((item) => this.items.push(item))
-	        	this.nextRow = response.data.data.nextRow
-			}
+        console.log('Current Page ' + page)
+        this.items = []
+      	response.data.data.items.forEach((item) => this.items.push(item))
+        console.log(this.items)
+      	this.nextRow = response.data.data.nextRow
+        this.quantityPages = response.data.data.quantityPages
+
 		},
 	
       openPopup(item) {
