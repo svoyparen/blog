@@ -1,8 +1,8 @@
 <template>
-	<div class="pushMessage">
-		<transition name="fade" class="message">
-			<p v-if="this.isVisible">{{ this.messageText }}</p>
-		</transition>
+	<div class="pushMessage" v-if="this.isVisible === true">
+			<div class="pushMessage__content">
+				<p>{{ this.messageText }}</p>
+			</div>
 	</div>
 </template>
 
@@ -10,18 +10,27 @@
 	export default {
 
 		data: () => ({
-					isVisible: false,
-					messageText: '',
-				}),
+				isVisible: false,
+				messageText: '',
+			}),
 
 		methods: {
-			setVisible(flag) {
-				this.isVisible = flag
+			setVisible(message) {
+				this.isVisible = true
+				this.setData(message)
+				this.hidePushMessage()
 			},
 
 			setData(message) {
 				this.messageText = message
 			},
+
+			hidePushMessage() {
+				let context = this
+				setTimeout( function() {
+					context.isVisible = false
+				}, 3000)
+			}
 		},
 
 	}
@@ -30,52 +39,20 @@
 <style scoped>
 	.pushMessage {
 		position: fixed;
-		top: 80px;
-		right: 16px;
+		top: 100px;
+		right: 26px;
 		z-index: 10;
 		padding: 15px 25px;
-		background-color: green;
 		border-radius: 5px;
-		color: #ffffff;
+		color: white;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		height: 50px;
+		margin-bottom: 16px;
+		background-color: green;
 		border: 2px solid white;
 		box-shadow: 0 0 10px rgba(0,0,0,0.5);
-		}
-			.fade-enter-active, .fade-leave-active {
-				transition: opacity .5s;
-			}
-			.fade-enter, .fade-leave-to  {
-				opacity: 0;
-			}
-	.message {
-		display: flex;
-		flex-direction: column;
 	}
-	.message-enter {
-		transform: translateX(120px);
-		opacity: 0;
-	}
-	.message-enter-active {
-		transition: all .6s ease;
-	}
-	.message-enter-to {
-		opacity: 1;
-	}
-	.message-leave {
-		opacity: 1;
 
-	}
-	.message-leave-active {
-		transition: all .6s ease, opacity .6s, height .6s .2s;
-	}
-	.message-leave-to {
-		height: 0;
-		transform: translateX(120px);
-		opacity: 0;
-	}
-	.message-move {
-		transition: all .6s ease;
-	}
 </style>

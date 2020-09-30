@@ -28,6 +28,8 @@
 			id: '',
 			title: '',
 			text: '',
+			messageSave: 'запись сохранена',
+			messageRemove: 'запись удалена',
 		}),
 
 		methods: {
@@ -57,8 +59,9 @@
 						})
 				}
 				this.isPostSend = false
-				//this.$emit('showPushMessage', 'Запись успешно сохранена')
 				this.setVisible(false)
+				this.$emit('showMessage', this.messageSave)
+				this.$emit('getData')
 			},
 
 			async remove(event) {
@@ -71,8 +74,9 @@
 						return false
 					})
 				this.isPostDelete = true
-				//this.$emit('showPushMessage', 'Запись успешно удалена')
+				this.$emit('showMessage', this.messageRemove)
 				this.setVisible(false)
+				this.$emit('getData')
 			},
 
 			close() {
@@ -86,7 +90,7 @@
 <style scoped>
 	.modal-mask {
 		position: fixed;
-		z-index: 9998;
+		z-index: 998;
 		top: 0;
 		left: 0;
 		width: 100%;
