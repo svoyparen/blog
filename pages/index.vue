@@ -7,26 +7,25 @@
       />
       <Popup
         ref="popup"
+        @showMessage="showPushMessage"
       />
-<!--    <PushMessage
-      @showPushMessage="showPush"
-      ref="pushMessage"
+    <PushMessage
+      ref="message"
     />
--->
   </div>
 </template>
 
 <script>
   import Table from '@/components/table'
   import Popup from '@/components/popup'
-  //import PushMessage from '~/components/PushMessage'
+  import PushMessage from '~/components/PushMessage'
   import axios from 'axios'
 
   export default {
     components: {
       Table,
       Popup,
-      //PushMessage,
+      PushMessage,
     },
 
     data: () => ({
@@ -34,7 +33,6 @@
       loading: false,
       nextRow: null,
       messageFlag: true,
-      messageText: 'Статья добавлена',
     }),
 
     mounted() {
@@ -74,13 +72,11 @@
         this.$refs.popup.setVisible(true)
         this.$refs.popup.setData(item)
       },
-/*
-      showPush(message) {
-        console.log('Show Push Message')
-        this.$refs.pushMessage.setVisible(true)
-        this.$refs.pushMessage.setData(message)
+
+      showPushMessage(message) {
+        this.$refs.message.setVisible(message)
       },
-*/
+
     },
 
   }
