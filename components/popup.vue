@@ -28,10 +28,12 @@
 			id: '',
 			title: '',
 			text: '',
-			messageSave: 'запись сохранена',
-			messageRemove: 'запись удалена',
+			messages: {
+				saved: 'запись сохранена',
+				updated: 'запись обновлена',
+				removed: 'запись удалена',
+			},
 		}),
-
 		methods: {
 			setVisible(flag) {
 				this.isVisible = flag
@@ -51,16 +53,16 @@
 						.catch( error => {
 							return false
 						})
-
+					this.$emit('showMessage', { message: this.messages['saved'], type: 'ok' })
 				} else {
 					let response = await axios.put('https://test.cornapi.ru/blog/' + id, {title, text})
 						.catch( error => {
 							return false
 						})
+					this.$emit('showMessage', { message : this.messages['updated'], type: 'warning' })
 				}
 				this.isPostSend = false
 				this.setVisible(false)
-				this.$emit('showMessage', this.messageSave)
 				this.$emit('getData')
 			},
 
@@ -74,7 +76,7 @@
 						return false
 					})
 				this.isPostDelete = true
-				this.$emit('showMessage', this.messageRemove)
+				this.$emit('showMessage', { message : this.messages['removed'], type: 'error'})
 				this.setVisible(false)
 				this.$emit('getData')
 			},
@@ -131,7 +133,6 @@
 		height: 250px;
 		margin: 15px;
 		padding: 15px;
-
 	}
 	.save {
 		margin: 15px;
@@ -167,6 +168,4 @@
 		cursor: pointer;
 		font-weight: bold;
 	}
-
-
 </style>
