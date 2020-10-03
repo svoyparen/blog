@@ -53,14 +53,15 @@
 						.catch( error => {
 							return false
 						})
-					this.$emit('showMessage', { message: this.messages['saved'], type: 'ok' })
+					this.$emit('showMessage', { message: this.messages['saved'], type: 'message' })
 				} else {
 					let response = await axios.put('https://test.cornapi.ru/blog/' + id, {title, text})
 						.catch( error => {
 							return false
 						})
-					this.$emit('showMessage', { message : this.messages['updated'], type: 'warning' })
+					this.$emit('showMessage', { message: this.messages['updated'], type: 'warning' })
 				}
+				this.clearData()
 				this.isPostSend = false
 				this.setVisible(false)
 				this.$emit('getData')
@@ -84,6 +85,12 @@
 			close() {
 				this.setVisible(false)
 			},
+
+			clearData() {
+				this.id = ''
+				this.title = ''
+				this.text = ''
+			}
 
 		}
 	}
