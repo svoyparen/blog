@@ -12,7 +12,7 @@
 		data: () => ({
 				isVisible: false,
 				messageText: '',
-				type: '',
+				type: 'ok',
 			}),
 
 		methods: {
@@ -20,6 +20,7 @@
 				this.isVisible = true
 				this.setData(message)
 				this.type = type
+				//console.log( 'message: ' + message +  '\ntype: ' + type)
 				this.hidePushMessage()
 			},
 
@@ -46,7 +47,6 @@
 		z-index: 10;
 		padding: 15px 25px;
 		border-radius: 5px;
-		color: black;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -54,6 +54,10 @@
 		margin-bottom: 16px;
 		border: 2px solid white;
 		box-shadow: 0 0 10px rgba(0,0,0,0.5);
+		&__content {
+			color: #990000;
+			font-weight: bold;
+		}
 	}
 
 	.ok {
@@ -66,6 +70,9 @@
 
 	.error {
 		background-color: red;
+	}
+	.message {
+		background-color: lightblue;
 	}
 
 </style>

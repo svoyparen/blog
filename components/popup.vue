@@ -53,13 +53,22 @@
 						.catch( error => {
 							return false
 						})
-					this.$emit('showMessage', { message: this.messages['saved'], type: 'message' })
+					if (response.status == '200') {
+						// sendMessage(1); message ans type in Array variable
+						this.$emit('showMessage', { message: this.messages['updated'], type: 'warning' })
+					} else {
+						return false
+					}
 				} else {
 					let response = await axios.put('https://test.cornapi.ru/blog/' + id, {title, text})
 						.catch( error => {
 							return false
 						})
-					this.$emit('showMessage', { message: this.messages['updated'], type: 'warning' })
+					if (response.status == '200') {
+						this.$emit('showMessage', { message: this.messages['updated'], type: 'warning' })
+					} else {
+						return false
+					}
 				}
 				this.clearData()
 				this.isPostSend = false
