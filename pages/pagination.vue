@@ -13,7 +13,7 @@
       @showMessage="showPushMessage"
     />
     <PushMessage
-      ref="message"
+      ref="pushMessage"
     />
 
   </div>
@@ -60,9 +60,13 @@
         this.$refs.popup.setVisible(true)
         this.$refs.popup.setData(item)
       },
+
       showPushMessage(data) {
-        this.$refs.message.setVisible(data['message'], data['type'])
+        this.$refs.pushMessage.setVisible(data['message'], data['type'])
+        console.log( 'message: ' + data['message'] +  '\ntype: ' + data['type'])
+        
       },
+
     },
   }
 </script>

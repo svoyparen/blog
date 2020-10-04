@@ -10,7 +10,7 @@
         @showMessage="showPushMessage"
       />
     <PushMessage
-      ref="message"
+      ref="pushMessage"
     />
   </div>
 </template>
@@ -20,41 +20,34 @@
   import Popup from '@/components/popup'
   import PushMessage from '~/components/PushMessage'
   import axios from 'axios'
-
   export default {
     components: {
       Table,
       Popup,
       PushMessage,
     },
-
     data: () => ({
       items: [],
       loading: false,
       nextRow: null,
       messageFlag: true,
     }),
-
     mounted() {
       this.$refs.overflow.addEventListener('scroll', this.handleScroll, false)
       this.getData()
     },
-
     beforeDestroy() {
       this.$refs.overflow.removeEventListener('scroll', this.handleScroll, false)
     },
-
     methods: {
       async handleScroll(e) {
         const
           { scrollTop, scrollHeight, clientHeight } = e.target,
           scrollTopMax = scrollHeight - clientHeight
-
         if(scrollTopMax - scrollTop < 50) {
             await this.getData()
         }
       },
-
       async getData() {
         if(this.loading === false && this.nextRow != -1) {
           this.loading = true
@@ -67,19 +60,13 @@
           this.loading = false
         }
       },
-
       openPopup(item) {
         this.$refs.popup.setVisible(true)
         this.$refs.popup.setData(item)
       },
-
-      showPushMessage(message) {
-        this.$refs.message.setVisible(message)
+      showPushMessage(data) {
+        this.$refs.pushMessage.setVisible(data['message'], data['type'])
       },
-
     },
-
   }
-
 </script>
-
